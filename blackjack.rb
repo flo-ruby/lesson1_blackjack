@@ -11,6 +11,7 @@
 #       - if 21, player wins
 #       - if less than 21, give the choice to the player to hit or stay
 #   - Stay: sum the value of the player cards
+#   - Show all the player cards
 # 6. Dealer: must choose to hit or stay
 #   - Same rules as for the player
 #   - But under 17, must hit
@@ -45,6 +46,20 @@ def create_shoe
   shoe = deck.shuffle
 end
 
+def show_card(card)
+  "#{card[0]} of #{card[1]}"
+end
+
+def show_hand(hand)
+  hand = hand.map do |card|
+    show_card(card)
+  end
+  hand.join(", ")
+end
+
 shoe = create_shoe
 player_hand = [shoe.pop, shoe.pop]
 dealer_hand = [shoe.pop, shoe.pop]
+
+puts "Dealer first card is: #{show_card(dealer_hand[0])}"
+puts "Your cards: #{show_hand(player_hand)}"
