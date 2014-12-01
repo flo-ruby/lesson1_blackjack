@@ -51,10 +51,31 @@ def show_card(card)
 end
 
 def show_hand(hand)
-  hand = hand.map do |card|
+  hand.map do |card|
     show_card(card)
+  end.join(", ")
+end
+
+def card_value(card)
+  case card[0]
+  when "Ace"
+    return "Ace"
+  when "Jack"
+    return 10
+  when "Queen"
+    return 10
+  when "King"
+    return 10
+  else
+    return card[0].to_i
   end
-  hand.join(", ")
+end
+
+def hand_value(hand)
+  hand_values = hand.map do |card|
+    card_value(card)
+  end
+  hand_values.reduce(:+)
 end
 
 shoe = create_shoe
@@ -63,3 +84,7 @@ dealer_hand = [shoe.pop, shoe.pop]
 
 puts "Dealer first card is: #{show_card(dealer_hand[0])}"
 puts "Your cards: #{show_hand(player_hand)}"
+# puts "Hit or Stay? (h/s)"
+# For the moment, suppose it is always stay for player and dealer and calculate totals
+
+binding.pry
