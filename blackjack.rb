@@ -27,6 +27,7 @@
 #   b. Take the highest score that is less or equal to 21
 # 3. If two or more cards are aces:
 #   - same thing, make all possible totals and take the highest score <= 21
+# Method: start with Aces worth 11 and calculate the sum, if it is > 21, then calculate again by removing 10, etc, until the sum is <=21, with the constraint: we have one right to remove 10 for each Ace present in the set of cards.
 #
 # Structure for the deck of cards
 # - each card is identified by 2 infos: value and suit
@@ -59,7 +60,7 @@ end
 def card_value(card)
   case card[0]
   when "Ace"
-    return "Ace"
+    return 11
   when "Jack"
     return 10
   when "Queen"
@@ -71,11 +72,23 @@ def card_value(card)
   end
 end
 
+def number_of_aces(hand)
+  hand.select do |card|
+    card.include?("Ace")
+  end.count
+end
+
 def hand_value(hand)
   hand_values = hand.map do |card|
     card_value(card)
   end
-  hand_values.reduce(:+)
+  v = hand_values.reduce(:+)
+  n = number_of_aces(hand)
+  while (v > 21) && (n > 0)
+    v = v - 10
+    n = n - 1
+  end
+  return v
 end
 
 shoe = create_shoe
