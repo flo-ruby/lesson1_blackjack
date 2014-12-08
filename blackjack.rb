@@ -95,37 +95,43 @@ def hand_value(hand)
 end
 
 def player_hits(player_hand, shoe)
+  puts "\n### You chose to hit ###"
   player_hand << shoe.pop
   puts "Your cards: #{show_hand(player_hand)}"
 end
 
 def dealer_hits(dealer_hand, shoe)
+  puts "\n### Dealer chose to hit ###"
   dealer_hand << shoe.pop
-  puts ""
-  puts "### Dealer chose to hit ###"
   puts "Dealer cards: #{show_hand(dealer_hand)}"
   puts ">>> current dealer points: #{hand_value(dealer_hand)}"
+end
+
+def player_stays
+  puts "\n### You chose to stay ###"
+end
+
+def dealer_stays(dealer_hand)
+  puts "\n### Dealer chose to stay ###"
+  puts "Dealer cards: #{show_hand(dealer_hand)}"
 end
 
 def player_plays(player_hand, shoe)
   loop do
     player_points = hand_value(player_hand)
     if player_points > 21
-      puts "You have #{player_points} points. That is more than 21! You lose."
+      puts "\nYou have #{player_points} points. That is more than 21! Dealer wins."
       exit
     elsif player_points == 21
-      puts "Wow, you got 21! You made the blackjack and you win!"
+      puts "\nWow, you got 21! You made the blackjack and you win!"
       exit
     end
     puts "Hit or Stay? (h/s)"
     answer = gets.chomp.downcase
     if answer == "h"
-      puts ""
-      puts "### You chose to hit ###"
       player_hits(player_hand, shoe)
     else
-      puts ""
-      puts "### You chose to stay ###"
+      player_stays
       break
     end
   end
@@ -136,18 +142,16 @@ def dealer_plays(dealer_hand, shoe, player_points)
     sleep(2)
     dealer_points = hand_value(dealer_hand)
     if dealer_points > 21
-      puts "Dealer has more than 21. You win!"
+      puts "\nDealer has #{dealer_points} which is more than 21. You win!"
       exit
     elsif dealer_points == 21
-      puts "Dealer has 21. You lose!"
+      puts "\nDealer has 21. Dealer wins."
       exit
     end
-  if dealer_points < 17 || dealer_points <= player_points
+    if dealer_points < 17 || dealer_points <= player_points
       dealer_hits(dealer_hand, shoe)
     else
-      puts ""
-      puts "### Dealer chose to stay ###"
-      puts "Dealer cards: #{show_hand(dealer_hand)}"
+      dealer_stays(dealer_hand)
       break
     end
   end
@@ -164,14 +168,15 @@ player_plays(player_hand, shoe)
 player_points = hand_value(player_hand)
 puts "Your points: #{player_points}."
 
+puts "Dealer cards: #{show_hand(dealer_hand)}"
 dealer_plays(dealer_hand, shoe, player_points)
 dealer_points = hand_value(dealer_hand)
 puts "Dealer points: #{dealer_points}."
 
 if player_points > dealer_points
-  puts "You have more points than the dealer. You win!"
+  puts "\nYou have more points than the dealer. You win!"
 elsif player_points < dealer_points
-  puts "Dealer has more points. You lose!"
+  puts "\nDealer has more points. Dealer wins."
 else
-  puts "It's a tie."
+  puts "\nIt's a tie."
 end
