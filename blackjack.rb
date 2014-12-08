@@ -15,6 +15,9 @@
 # 6. Dealer: must choose to hit or stay
 #   - Same rules as for the player
 #   - But under 17, must hit
+#   - When does dealer hit?
+#       - if < 17
+#       - or if dealer points < player points (otherwise, would lose)
 # 7. Compare the results of the player and dealer
 #
 # Method to calculate the sum of the cards
@@ -91,13 +94,84 @@ def hand_value(hand)
   return v
 end
 
+def player_hits(player_hand, shoe)
+  player_hand << shoe.pop
+  puts "Your cards: #{show_hand(player_hand)}"
+end
+
+def dealer_hits(dealer_hand, shoe)
+  dealer_hand << shoe.pop
+  puts ""
+  puts "### Dealer chose to hit ###"
+  puts "Dealer cards: #{show_hand(dealer_hand)}"
+  puts ">>> current dealer points: #{hand_value(dealer_hand)}"
+end
+
+def player_plays(player_hand, shoe)
+  loop do
+    player_points = hand_value(player_hand)
+    if player_points > 21
+      puts "You have #{player_points} points. That is more than 21! You lose."
+      exit
+    elsif player_points == 21
+      puts "Wow, you got 21! You made the blackjack and you win!"
+      exit
+    end
+    puts "Hit or Stay? (h/s)"
+    answer = gets.chomp.downcase
+    if answer == "h"
+      puts ""
+      puts "### You chose to hit ###"
+      player_hits(player_hand, shoe)
+    else
+      puts ""
+      puts "### You chose to stay ###"
+      break
+    end
+  end
+end
+
+def dealer_plays(dealer_hand, shoe, player_points)
+  loop do
+    sleep(2)
+    dealer_points = hand_value(dealer_hand)
+    if dealer_points > 21
+      puts "Dealer has more than 21. You win!"
+      exit
+    elsif dealer_points == 21
+      puts "Dealer has 21. You lose!"
+      exit
+    end
+  if dealer_points < 17 || dealer_points <= player_points
+      dealer_hits(dealer_hand, shoe)
+    else
+      puts ""
+      puts "### Dealer chose to stay ###"
+      puts "Dealer cards: #{show_hand(dealer_hand)}"
+      break
+    end
+  end
+end
+
 shoe = create_shoe
 player_hand = [shoe.pop, shoe.pop]
 dealer_hand = [shoe.pop, shoe.pop]
 
 puts "Dealer first card is: #{show_card(dealer_hand[0])}"
 puts "Your cards: #{show_hand(player_hand)}"
-# puts "Hit or Stay? (h/s)"
-# For the moment, suppose it is always stay for player and dealer and calculate totals
 
-binding.pry
+player_plays(player_hand, shoe)
+player_points = hand_value(player_hand)
+puts "Your points: #{player_points}."
+
+dealer_plays(dealer_hand, shoe, player_points)
+dealer_points = hand_value(dealer_hand)
+puts "Dealer points: #{dealer_points}."
+
+if player_points > dealer_points
+  puts "You have more points than the dealer. You win!"
+elsif player_points < dealer_points
+  puts "Dealer has more points. You lose!"
+else
+  puts "It's a tie."
+end
