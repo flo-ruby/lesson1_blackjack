@@ -167,8 +167,8 @@ puts "Your cards: #{show_hand(player_hand)}"
 player_plays(player_hand, shoe)
 player_points = hand_value(player_hand)
 puts "Your points: #{player_points}."
-
 puts "Dealer cards: #{show_hand(dealer_hand)}"
+
 dealer_plays(dealer_hand, shoe, player_points)
 dealer_points = hand_value(dealer_hand)
 puts "Dealer points: #{dealer_points}."
