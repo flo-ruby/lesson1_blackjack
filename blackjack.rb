@@ -42,7 +42,7 @@
 
 require "pry"
 
-CARD_VALUES = ["Ace", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
+CARD_VALUES = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
 CARD_SUITS = [:clubs, :diamonds, :hearts, :spades]
 
 def create_shoe
