@@ -148,7 +148,7 @@ def dealer_plays(dealer_hand, shoe, player_points)
       puts "\nDealer has 21. Dealer wins."
       exit
     end
-    if dealer_points < 17 || dealer_points <= player_points
+    if dealer_points < 17
       dealer_hits(dealer_hand, shoe)
     else
       dealer_stays(dealer_hand)
